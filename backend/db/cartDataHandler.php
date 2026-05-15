@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/DBaccess.php';
+require_once __DIR__ . '/../models/cart.class.php';
 
 class CartDataHandler
 {
@@ -9,7 +10,7 @@ class CartDataHandler
     {
         $this->db = $dbaccess->getConnection();
     }
-    public function addToCart(int $userId, int $productId, int $quantity): array
+    public function addToCart(Cart $cart): array
     {
         $stmt = $this->db->prepare("
         INSERT INTO cart (user_id, product_id, quantity)
@@ -17,11 +18,11 @@ class CartDataHandler
         ON DUPLICATE KEY UPDATE
         quantity = quantity + VALUES(quantity)
     ");
-        $stmt->bind_param("iii", $userId, $productId, $quantity);
+        $stmt->bind_param("iii", $cart->user_id, $cart->product_id, $cart->quantity);
         $stmt->execute();
         $stmt->close();
 
-        $cartCount = $this->getCartCount($userId);
+        $cartCount = $this->getCartCount($cart->user_id);
         return ['cartCount' => $cartCount];
     }
 

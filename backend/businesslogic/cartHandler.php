@@ -17,22 +17,22 @@ class CartHandler
         $quantity  = $data['quantity']  ?? null;
 
         if (!$userId) {
-            return ['code' => 401, 'error' => 'Not authenticated'];
+            return ['code' => 401];
         }
 
         switch ($method) {
             case "addToCart":
                 if (!$productId || !$quantity) {
-                    return ['code' => 400, 'error' => 'Missing parameters'];
+                    return ['code' => 400];
                 }
                 $cart = new Cart($userId, $productId, $quantity);
-                return $this->dataHandler->addToCart($cart->user_id, $cart->product_id, $cart->quantity);
+                return $this->dataHandler->addToCart($cart);
 
             case "loadCart":
                 return $this->dataHandler->loadCart($userId);
 
             default:
-                return ['code' => 400, 'error' => 'Unknown method'];
+                return ['code' => 400];
         }
     }
 }
