@@ -25,21 +25,5 @@ class DBaccess {
     public function getConnection(): mysqli {
         return $this->db;
     }
-
-    /**
-     * Prepared Statement ausführen
-     */
-    public function prepare(string $query) {
-        return $this->db->prepare($query);
-    }
-
-    /**
-     * Verbindung schließen
-     */
-    public function close(): void {
-        if ($this->db) {
-            $this->db->close();
-        }
-    }
 }
 ?>

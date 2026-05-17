@@ -5,7 +5,7 @@ require_once __DIR__ . '/../models/cart.class.php';
 
 class CartDataHandler
 {
-    private $db;
+    private mysqli $db;
     public function __construct(dbaccess $dbaccess)
     {
         $this->db = $dbaccess->getConnection();

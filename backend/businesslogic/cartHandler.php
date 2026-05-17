@@ -3,8 +3,8 @@ require_once __DIR__ . '/../models/cart.class.php';
 
 class CartHandler
 {
-    private $dataHandler;
-    public function __construct($cartDataHandler)
+    private CartDataHandler $dataHandler;
+    public function __construct(CartDataHandler $cartDataHandler)
     {
         $this->dataHandler = $cartDataHandler;
     }
@@ -17,13 +17,13 @@ class CartHandler
         $quantity  = $data['quantity']  ?? null;
 
         if (!$userId) {
-            return ['code' => 401];
+            return ['code' => 401, 'error' => 'Benutzer nicht angemeldet'];
         }
 
         switch ($method) {
             case "addToCart":
                 if (!$productId || !$quantity) {
-                    return ['code' => 400];
+                    return ['code' => 400, 'error' => 'productId und quantity sind erforderlich'];
                 }
                 $cart = new Cart($userId, $productId, $quantity);
                 return $this->dataHandler->addToCart($cart);
@@ -32,7 +32,7 @@ class CartHandler
                 return $this->dataHandler->loadCart($userId);
 
             default:
-                return ['code' => 400];
+                return ['code' => 400, 'error' => 'Unbekannte Methode: ' . $method];
         }
     }
 }
